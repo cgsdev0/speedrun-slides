@@ -9,8 +9,6 @@ transition: fade
 comark: true
 # duration of the presentation
 duration: 5min
-base: /speedrun-slides/
-routerMode: hash
 fonts:
   sans: Roboto
   serif: Roboto Slab
