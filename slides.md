@@ -1,662 +1,439 @@
 ---
 # try also 'default' to start simple
-theme: seriph
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
-background: https://cover.sli.dev
-# some information about your slides (markdown enabled)
-title: Welcome to Slidev
-info: |
-  ## Slidev Starter Template
-  Presentation slides for developers.
-
-  Learn more at [Sli.dev](https://sli.dev)
+theme: eloc
+title: Vulkan Triangle Speedrun (any%)
 # apply UnoCSS classes to the current slide
 class: text-center
-# https://sli.dev/features/drawing
-drawings:
-  persist: false
-# slide transition: https://sli.dev/guide/animations.html#slide-transitions
-transition: slide-left
+transition: fade
 # enable Comark Syntax: https://comark.dev/syntax/markdown
 comark: true
 # duration of the presentation
-duration: 35min
+duration: 5min
+fonts:
+  sans: Roboto
+  serif: Roboto Slab
+  mono: Hack Nerd Font
 ---
-
-# Welcome to Slidev
-
-Presentation slides for developers
-
-<div @click="$slidev.nav.next" class="mt-12 py-1" hover:bg="white op-10">
-  Press Space for next page <carbon:arrow-right />
-</div>
-
-<div class="abs-br m-6 text-xl">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="slidev-icon-btn">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" class="slidev-icon-btn">
-    <carbon:logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
-
----
-transition: fade-out
----
-
-# What is Slidev?
-
-Slidev is a slides maker and presenter designed for developers, consist of the following features
-
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - themes can be shared and re-used as npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embed Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export to PDF, PPTX, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - virtually anything that's possible on a webpage is possible in Slidev
-<br>
-<br>
-
-Read more about [Why Slidev?](https://sli.dev/guide/why)
-
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/features/slide-scope-style
--->
 
 <style>
 h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
+  color: red !important;
+  font-size: 6rem !important;
 }
 </style>
-
-<!--
-Here is another comment.
--->
+# Vulkan Triangle Speedrun
+## (any% category)
 
 ---
-transition: slide-up
-level: 2
----
 
-# Navigation
+# Define "Triangle"
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/ui#navigation-bar)
+```glsl
+static float2 positions[3] = float2[](
+    float2( 0.0, -0.5),
+    float2( 0.5,  0.5),
+    float2(-0.5,  0.5)
+);
 
-## Keyboard Shortcuts
-
-|                                                     |                             |
-| --------------------------------------------------- | --------------------------- |
-| <kbd>right</kbd> / <kbd>space</kbd>                 | next animation or slide     |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd>                                       | previous slide              |
-| <kbd>down</kbd>                                     | next slide                  |
-
-<!-- https://sli.dev/guide/animations.html#click-animation -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-  alt=""
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
-
----
-layout: two-cols
-layoutClass: gap-16
----
-
-# Table of contents
-
-You can use the `Toc` component to generate a table of contents for your slides:
-
-```html
-<Toc minDepth="1" maxDepth="1" />
+static float3 colors[3] = float3[](
+    float3(1.0, 0.0, 0.0),
+    float3(0.0, 1.0, 0.0),
+    float3(0.0, 0.0, 1.0)
+);
 ```
 
-The title will be inferred from your slide content, or you can override it with `title` and `level` in your frontmatter.
-
-::right::
-
-<Toc text-sm minDepth="1" maxDepth="2" />
-
----
-layout: image-right
-image: https://cover.sli.dev
 ---
 
-# Code
+# Vertex Shader
 
-Use code snippets and get the highlighting directly, and even types hover!
+```glsl
+struct VertexOutput {
+    float3 color;
+    float4 sv_position : SV_Position;
+};
 
-```ts [filename-example.ts] {all|4|6|6-7|9|all} twoslash
-// TwoSlash enables TypeScript hover information
-// and errors in markdown code blocks
-// More at https://shiki.style/packages/twoslash
-import { computed, ref } from 'vue'
-
-const count = ref(0)
-const doubled = computed(() => count.value * 2)
-
-doubled.value = 2
-```
-
-<arrow v-click="[4, 5]" x1="350" y1="310" x2="195" y2="342" color="#953" width="2" arrowSize="1" />
-
-<!-- This allow you to embed external code blocks -->
-<<< @/snippets/external.ts#snippet
-
-<!-- Footer -->
-
-[Learn more](https://sli.dev/features/line-highlighting)
-
-<!-- Inline style -->
-<style>
-.footnotes-sep {
-  @apply mt-5 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
-<!--
-Notes can also sync with clicks
-
-[click] This will be highlighted after the first click
-
-[click] Highlighted with `count = ref(0)`
-
-[click:3] Last click (skip two clicks)
--->
-
----
-level: 2
----
-
-# Shiki Magic Move
-
-Powered by [shiki-magic-move](https://shiki-magic-move.netlify.app/), Slidev supports animations across multiple code snippets.
-
-Add multiple code blocks and wrap them with <code>````md magic-move</code> (four backticks) to enable the magic move. For example:
-
-````md magic-move {lines: true}
-```ts {*|2|*}
-// step 1
-const author = reactive({
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
-})
-```
-
-```ts {*|1-2|3-4|3-4,8}
-// step 2
-export default {
-  data() {
-    return {
-      author: {
-        name: 'John Doe',
-        books: [
-          'Vue 2 - Advanced Guide',
-          'Vue 3 - Basic Guide',
-          'Vue 4 - The Mystery'
-        ]
-      }
-    }
-  }
+[shader("vertex")]
+VertexOutput vertMain(uint vid : SV_VertexID) {
+    VertexOutput output;
+    output.sv_position = float4(positions[vid], 0.0, 1.0);
+    output.color = colors[vid];
+    return output;
 }
 ```
 
-```ts
-// step 3
-export default {
-  data: () => ({
-    author: {
-      name: 'John Doe',
-      books: [
-        'Vue 2 - Advanced Guide',
-        'Vue 3 - Basic Guide',
-        'Vue 4 - The Mystery'
-      ]
-    }
-  })
+---
+
+# Fragment Shader
+```glsl
+[shader("fragment")]
+float4 fragMain(VertexOutput inVert) : SV_Target
+{
+    float3 color = inVert.color;
+    return float4(color, 1.0);
 }
 ```
 
-Non-code blocks are ignored.
+---
 
-```vue
-<!-- step 4 -->
-<script setup>
-const author = {
-  name: 'John Doe',
-  books: [
-    'Vue 2 - Advanced Guide',
-    'Vue 3 - Basic Guide',
-    'Vue 4 - The Mystery'
-  ]
+# GLFW
+
+````md magic-move
+```cpp
+#include <bits/stdc++.h>
+#define VK_USE_PLATFORM_WAYLAND_KHR
+#include <GLFW/glfw3.h>
+
+int main() {
+    return 0;
 }
-</script>
+```
+```cpp
+#include <bits/stdc++.h>
+#define VK_USE_PLATFORM_WAYLAND_KHR
+#include <GLFW/glfw3.h>
+
+int main() {
+
+    glfwInit();
+    glfwWindowHint(GLFW_CLIENT_API, 0);
+
+    return 0;
+}
+```
+```cpp
+#include <bits/stdc++.h>
+#define VK_USE_PLATFORM_WAYLAND_KHR
+#include <GLFW/glfw3.h>
+
+int main() {
+
+    glfwInit();
+    glfwWindowHint(GLFW_CLIENT_API, 0);
+
+    uint count = 0;
+    auto ext = glfwGetRequiredInstanceExtensions(&count);
+
+    return 0;
+}
 ```
 ````
 
 ---
 
-# Components
+# vk::Instance
 
-<div grid="~ cols-2 gap-4">
-<div>
+```cpp {4|6-7|9-14}
+uint count = 0;
+auto ext = glfwGetRequiredInstanceExtensions(&count);
 
-You can use Vue components directly inside your slides.
+raii::Context context;
 
-We have provided a few built-in components like `<Tweet/>`, `<BlueSky/>`, and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
+ApplicationInfo app {.apiVersion = ApiVersion14 };
+app.apiVersion = ApiVersion14;
 
-```html
-<Counter :count="10" />
+auto instance =
+    raii::Instance(context, {
+      .pApplicationInfo = &app,
+      .enabledExtensionCount = count,
+      .ppEnabledExtensionNames = ext
+    });
 ```
 
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
+---
 
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
+# vk::VkSurfaceKHR
 
-</div>
-<div>
+```cpp {1|3|5-10|7|9|all}
+VkSurfaceKHR surface;
 
-```html
-<Tweet id="1390115482657726468" />
+auto window = glfwCreateWindow(800, 600, "", nullptr, nullptr);
+
+glfwCreateWindowSurface(
+    *instance,
+    window,
+    nullptr,
+    &surface
+);
 ```
 
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
----
-class: px-20
 ---
 
-# Themes
+# vk::PhysicalDevice
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
+````md magic-move
+```cpp
+auto devices = instance.enumeratePhysicalDevices();
+```
+```cpp
+auto devices = instance.enumeratePhysicalDevices();
 
-<div grid="~ cols-2 gap-2" m="t-2">
+auto physicalDevice = devices[0]; // lol
+```
+````
 
-```yaml
 ---
-theme: default
+
+# vk::Device
+
+````md magic-move
+```cpp
+DeviceCreateInfo devInfo;
+
+auto dev = raii::Device(physicalDevice, devInfo);
+```
+```cpp
+DeviceCreateInfo devInfo;
+devInfo.setPEnabledExtensionNames(KHRSwapchainExtensionName);
+
+auto dev = raii::Device(physicalDevice, devInfo);
+```
+```cpp
+float qp = 0;
+DeviceQueueCreateInfo qInfo;
+qInfo.setQueuePriorities(qp);
+
+DeviceCreateInfo devInfo;
+devInfo.setPEnabledExtensionNames(KHRSwapchainExtensionName);
+
+devInfo.setQueueCreateInfos(qInfo);
+
+auto dev = raii::Device(physicalDevice, devInfo);
+```
+````
 ---
+
+# vk::Queue
+
+```cpp
+auto queue = raii::Queue(dev, 0, 0);
 ```
 
-```yaml
----
-theme: seriph
----
-```
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true" alt="">
-
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true" alt="">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/guide/theme-addon#use-theme) and
-check out the [Awesome Themes Gallery](https://sli.dev/resources/theme-gallery).
-
 ---
 
-# Clicks Animations
+# vk::Swapchain
 
-You can add `v-click` to elements to add a click animation.
-
-<div v-click>
-
-This shows up when you press <kbd>space</kbd> or <kbd>right</kbd>, or click outside the slide on the right.
-
-```html
-<div v-click>This shows up when you trigger a click animation.</div>
+````md magic-move
+```cpp
+auto swapchain = raii::SwapchainKHR(dev, info);
 ```
+```cpp {1-8|4-5}
+SwapchainCreateInfoKHR info{
+    .surface = surface,
+    .minImageCount = 3,
+    .imageFormat = fmt.format,
+    .imageExtent = e,
+    .imageArrayLayers = 1,
+    .imageUsage = ImageUsageFlagBits::eColorAttachment
+};
 
-</div>
-
-<p v-click>
-You can also add modifiers to change the animation:
-</p>
-
-<div class="grid gap-3 mt-4 text-sm" style="grid-template-columns: repeat(3, 1fr) 1.5fr 1fr">
-  <div v-after.up class="p-3 rounded border border-primary/20 bg-primary/10">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.up</div>
-    <div>Slide from bottom</div>
-  </div>
-  <div v-click.fade-in class="p-3 rounded border border-primary/30 bg-primary/15">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade-in</div>
-    <div>Fade in</div>
-  </div>
-  <div v-click.fade class="p-3 rounded border border-primary/40 bg-primary/20">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade</div>
-    <div>Dim (0.5 opacity)</div>
-  </div>
-  <div v-click.fade.right.scale class="p-3 rounded border border-primary/50 bg-primary/25">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.fade.right.scale</div>
-    <div>Composed</div>
-  </div>
-  <div v-click.none class="p-3 rounded border border-primary/60 bg-primary/30">
-    <div class="font-mono text-xs opacity-60 mb-1">v-click.none</div>
-    <div>No transition</div>
-  </div>
-</div>
-
-<v-click>
-
-The <span v-mark.red="7"><code>v-mark</code> directive</span>
-also allows you to add
-<span v-mark.circle.orange="8">inline marks</span>
-, powered by [Rough Notation](https://roughnotation.com/):
-
-```html
-<span v-mark.underline.orange>inline markers</span>
+auto swapchain = raii::SwapchainKHR(dev, info);
 ```
+```cpp {1-2}
+SurfaceFormatKHR fmt{.format = (Format)50};
+Extent2D e(800, 600);
 
-</v-click>
+SwapchainCreateInfoKHR info{
+    .surface = surface,
+    .minImageCount = 3,
+    .imageFormat = fmt.format,
+    .imageExtent = e,
+    .imageArrayLayers = 1,
+    .imageUsage = ImageUsageFlagBits::eColorAttachment
+};
 
-<div v-click mt-12>
-
-[Learn more](https://sli.dev/guide/animations#click-animation)
-
-</div>
+auto swapchain = raii::SwapchainKHR(dev, info);
+```
+````
 
 ---
 
-# Motions
+# vk::ImageView
 
-Motion animations are powered by [@vueuse/motion](https://motion.vueuse.org/), triggered by `v-motion` directive.
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }"
-  :click-3="{ x: 80 }"
-  :leave="{ x: 1000 }"
->
-  Slidev
-</div>
+````md magic-move
+```cpp
+auto images = swapchain.getImages();
 ```
+```cpp
+auto images = swapchain.getImages();
 
-<div class="w-60 relative">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-square.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-circle.png"
-      alt=""
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute inset-0"
-      src="https://sli.dev/logo-triangle.png"
-      alt=""
-    />
-  </div>
+vector<raii::ImageView> views;
 
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
+for (auto &image : images) {
+    ImageViewCreateInfo iv{
+        .image = image,
+        .format = fmt.format,
+        .subresourceRange = {
+            ImageAspectFlagBits::eColor,
+            0, 1, 0, 1,
+        }
+    };
+    views.emplace_back(dev, iv);
 }
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 30, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn more](https://sli.dev/guide/animations.html#motion)
-
-</div>
+```
+````
 
 ---
 
-# $\LaTeX$
+# Pipeline: Load Shaders
 
-$\LaTeX$ is supported out-of-box. Powered by [$\KaTeX$](https://katex.org/).
+```cpp{1|7}
+auto file = ifstream("shaders/slang.spv", ios::binary);
+vector<char> code(istreambuf_iterator<char>(file), {});
 
-<div h-3 />
+ShaderModuleCreateInfo createInfo{.codeSize = code.size(),
+                                  .pCode = (uint *)(code.data())};
 
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$ {1|3|all}
-\begin{aligned}
-\nabla \cdot \vec{E} &= \frac{\rho}{\varepsilon_0} \\
-\nabla \cdot \vec{B} &= 0 \\
-\nabla \times \vec{E} &= -\frac{\partial\vec{B}}{\partial t} \\
-\nabla \times \vec{B} &= \mu_0\vec{J} + \mu_0\varepsilon_0\frac{\partial\vec{E}}{\partial t}
-\end{aligned}
-$$
-
-[Learn more](https://sli.dev/features/latex)
-
----
-
-# Diagrams
-
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
-
-<div class="grid grid-cols-4 gap-5 pt-4 -mb-6">
-
-```mermaid {scale: 0.5, alt: 'A simple sequence diagram'}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
-
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
-
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectiveness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
-
-```plantuml {scale: 0.7}
-@startuml
-
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
-
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
-
-cloud {
-  [Example 1]
-}
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
-
-</div>
-
-Learn more: [Mermaid Diagrams](https://sli.dev/features/mermaid) and [PlantUML Diagrams](https://sli.dev/features/plantuml)
-
----
-foo: bar
-dragPos:
-  square: 691,32,167,_,-16
----
-
-# Draggable Elements
-
-Double-click on the draggable elements to edit their positions.
-
-<br>
-
-###### Directive Usage
-
-```md
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-```
-
-<br>
-
-###### Component Usage
-
-```md
-<v-drag text-3xl>
-  <div class="i-carbon:arrow-up" />
-  Use the `v-drag` component to have a draggable container!
-</v-drag>
-```
-
-<v-drag pos="663,206,261,_,-15">
-  <div text-center text-3xl border border-main rounded>
-    Double-click me!
-  </div>
-</v-drag>
-
-<img v-drag="'square'" src="https://sli.dev/logo.png">
-
-###### Draggable Arrow
-
-```md
-<v-drag-arrow two-way />
-```
-
-<v-drag-arrow pos="67,452,253,46" two-way op70 />
-
----
-src: ./pages/imported-slides.md
-hide: false
----
-
----
-
-# Monaco Editor
-
-Slidev provides built-in Monaco Editor support.
-
-Add `{monaco}` to the code block to turn it into an editor:
-
-```ts {monaco}
-import { ref } from 'vue'
-import { emptyArray } from './external'
-
-const arr = ref(emptyArray(10))
-```
-
-Use `{monaco-run}` to create an editor that can execute the code directly in the slide:
-
-```ts {monaco-run}
-import { version } from 'vue'
-import { emptyArray, sayHello } from './external'
-
-sayHello()
-console.log(`vue ${version}`)
-console.log(emptyArray<number>(10).reduce(fib => [...fib, fib.at(-1)! + fib.at(-2)!], [1, 1]))
+raii::ShaderModule shaderModule{dev, createInfo};
 ```
 
 ---
-layout: center
-class: text-center
+
+# Pipeline: Shader Stages
+
+```cpp
+PipelineShaderStageCreateInfo stages[] = {
+    {.stage = ShaderStageFlagBits::eVertex,
+     .module = shaderModule,
+     .pName = "vertMain"},
+    {.stage = ShaderStageFlagBits::eFragment,
+     .module = shaderModule,
+     .pName = "fragMain"}};
+```
+
 ---
 
-# Learn More
+# Pipeline: States
 
-[Documentation](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/resources/showcases)
+```cpp
+vector<DynamicState> states =
+  {DynamicState::eViewport, DynamicState::eScissor};
 
-<PoweredBySlidev mt-10 />
+PipelineDynamicStateCreateInfo ds;
+ds.setDynamicStates(states);
+
+Viewport viewport(0, 0, 800, 600);
+Rect2D scissor{Offset2D{0, 0}, e};
+
+PipelineViewportStateCreateInfo vp;
+vp.setViewports(viewport);
+vp.setScissors(scissor);
+```
+
+---
+
+# Pipeline: Color Blending
+
+```cpp
+PipelineColorBlendAttachmentState cba{
+    .colorWriteMask = ColorComponentFlagBits(15)};
+
+PipelineColorBlendStateCreateInfo blend;
+blend.setAttachments({cba});
+
+PipelineRasterizationStateCreateInfo rs;
+PipelineMultisampleStateCreateInfo ms;
+```
+
+---
+
+# Pipeline: Layout
+
+```cpp
+auto pipelineLayout = raii::PipelineLayout(dev, {});
+
+PipelineRenderingCreateInfo pri;
+pri.setColorAttachmentFormats(fmt.format);
+```
+
+---
+
+# Graphics Pipeline
+
+```cpp
+auto graphicsPipeline =
+  raii::Pipeline(dev, nullptr, {
+    .pNext = &pri,
+    .stageCount = 2,
+    .pStages = stages,
+    .pInputAssemblyState = &input,
+    .pViewportState = &vp,
+    .pRasterizationState = &rs,
+    .pMultisampleState = &ms,
+    .pColorBlendState = &blend,
+    .pDynamicState = &ds,
+    .layout = pipelineLayout});
+```
+
+---
+
+# Command Buffer
+````md magic-move
+```cpp
+auto commandBuffer = std::move(
+    raii::CommandBuffers(dev, {
+        .commandPool = commandPool,
+        .commandBufferCount = 1,
+      }).front());
+```
+```cpp
+auto commandPool = raii::CommandPool(dev,
+    {.flags = CommandPoolCreateFlagBits::eResetCommandBuffer});
+
+auto commandBuffer = std::move(
+    raii::CommandBuffers(dev, {
+        .commandPool = commandPool,
+        .commandBufferCount = 1,
+      }).front());
+```
+````
+
+---
+
+# Render: Acquire Image
+
+```cpp
+auto [result, idx] =
+    swapchain.acquireNextImage(UINT64_MAX, nullptr, nullptr);
+```
+
+---
+
+# Render: Rendering Info
+
+```cpp {1|2|3}
+RenderingAttachmentInfo attachmentInfo{.imageView = views[idx]};
+RenderingInfo renderingInfo = {.renderArea = {.extent = e}};
+renderingInfo.setColorAttachments(attachmentInfo);
+```
+
+---
+
+# Render: Command Buffer
+
+```cpp {1|2|3-4|5|6|7|8|9}
+cbuf.begin({});
+cbuf.beginRendering(renderingInfo);
+cbuf.bindPipeline(PipelineBindPoint::eGraphics,
+                  *graphicsPipeline);
+cbuf.setViewport(0, viewport);
+cbuf.setScissor(0, scissor);
+cbuf.draw(3, 1, 0, 0);
+cbuf.endRendering();
+cbuf.end();
+```
+
+---
+
+# Render: Submit
+
+```cpp {1|3-5}
+queue.submit(s.setCommandBuffers(*cbuf), nullptr);
+
+result = queue.presentKHR({.swapchainCount = 1,
+                           .pSwapchains = &*swapchain,
+                           .pImageIndices = &idx});
+```
+
+# Triangle!
+
+![triangle](/triangle.png)
