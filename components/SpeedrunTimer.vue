@@ -2,7 +2,7 @@
 import { ref, onUnmounted, watch } from "vue";
 import { useNav } from "@slidev/client";
 
-const { currentPage, currentSlideRoute } = useNav();
+const { currentPage, currentSlideRoute, total } = useNav();
 
 const elapsed = ref(0);
 const running = ref(false);
@@ -66,6 +66,24 @@ watch(currentPage, () => {
   }
   if (!running.value) return;
   recordSplit(getSlideTitle());
+});
+function pause() {
+  running.value = false;
+  clearInterval(intervalId);
+}
+
+watch(currentPage, () => {
+  if (!hasStarted) {
+    hasStarted = true;
+    start();
+    return;
+  }
+  if (!running.value) return;
+  recordSplit(getSlideTitle());
+
+  if (currentPage.value >= total.value) {
+    pause();
+  }
 });
 
 onUnmounted(() => clearInterval(intervalId));

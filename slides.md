@@ -434,6 +434,8 @@ result = queue.presentKHR({.swapchainCount = 1,
                            .pImageIndices = &idx});
 ```
 
+---
+
 # Triangle!
 
-![triangle](/triangle.png)
+<img src="./triangle.png" />
