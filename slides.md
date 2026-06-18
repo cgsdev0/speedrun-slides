@@ -9,6 +9,7 @@ transition: fade
 comark: true
 # duration of the presentation
 duration: 5min
+routerMode: hash
 fonts:
   sans: Roboto
   serif: Roboto Slab
