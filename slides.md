@@ -143,7 +143,7 @@ auto instance =
 
 # vk::VkSurfaceKHR
 
-```cpp {1|3|5-10|7|9|all}
+```cpp {1|3|5-10}
 VkSurfaceKHR surface;
 
 auto window = glfwCreateWindow(800, 600, "", nullptr, nullptr);
@@ -426,7 +426,9 @@ cbuf.end();
 
 # Render: Submit
 
-```cpp {1|3-5}
+```cpp {1|3|5-7}
+SubmitInfo s;
+
 queue.submit(s.setCommandBuffers(*cbuf), nullptr);
 
 result = queue.presentKHR({.swapchainCount = 1,
