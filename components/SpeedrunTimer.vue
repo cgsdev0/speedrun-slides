@@ -58,28 +58,22 @@ function recordSplit(title) {
   lastSplitTime = elapsed.value;
 }
 
-watch(currentPage, () => {
-  if (!hasStarted) {
-    hasStarted = true;
-    start();
-    return;
-  }
-  if (!running.value) return;
-  recordSplit(getSlideTitle());
-});
 function pause() {
   running.value = false;
   clearInterval(intervalId);
 }
 
+let lastTitle = "";
 watch(currentPage, () => {
   if (!hasStarted) {
     hasStarted = true;
     start();
+    lastTitle = getSlideTitle();
     return;
   }
   if (!running.value) return;
-  recordSplit(getSlideTitle());
+  recordSplit(lastTitle);
+  lastTitle = getSlideTitle();
 
   if (currentPage.value >= total.value) {
     pause();
