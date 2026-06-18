@@ -1,6 +1,6 @@
 ---
 # try also 'default' to start simple
-theme: eloc
+theme: default
 title: Vulkan Triangle Speedrun (any%)
 # apply UnoCSS classes to the current slide
 class: text-center
