@@ -438,4 +438,4 @@ result = queue.presentKHR({.swapchainCount = 1,
 
 # Triangle!
 
-<img src="./triangle.png" />
+<img src="/triangle.png" />
